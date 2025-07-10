@@ -11,38 +11,41 @@
         <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
         <link rel="stylesheet" href="style.css">
         <script type="text/babel">
-            const animals = ['Cane', 'Gatto', 'Coniglio', 'Pesce', 'Uccello'];
-
-            // Componente React per la lista degli animali
+            
             const { useState } = React;
 
-            function AnimalList() {
-                const [animal, setAnimal] = useState([]);
+            const ListaAnimali = () =>{
+                const animalsChoices = ["Cane", "Gatto", "Pappagallo", "Cavallo", "Panda"];
+                const [animals, setAnimals] = useState([])
 
-                const addRandomAnimal = () => {
-                    const randomIndex = Math.floor(Math.random() * animals.length);
-                    const randomAnimal = animals[randomIndex];
-                    setAnimal([...animal, randomAnimal]);
-                };
+                const addAnimal = () => {
+                    const randomIndex = Math.floor(Math.random() * animalsChoices.length);
+                    const randomAnimal = animalsChoices[randomIndex]
+                    setAnimals(curr => [...curr, randomAnimal])
+                }
 
-                return (
+                return(
                     <>
-                        <button onClick={addRandomAnimal}>Aggiungi Animale</button>
-                        <details>
-                            <summary>Animali</summary>
-                            <ul>
-                                {animal.map((animal, index) => (
-                                    <li key={index}>{animal}</li>
-                                ))}
-                            </ul> 
-                        </details>
+                    <button onclick={addAnimal}>Aggiungi Animale Casuale</button>
+                    <details>
+                    <summary> Animali </summary>
+                    <ul>
+                        {animals.map((a, i) => (
+                            <li key={i}>{a}</li>
+                        ))}
+                    </ul>
+                    </details>
                     </>
-                );
+                )
             }
 
-            // Monta il componente nel DOM
-            const root = ReactDOM.createRoot(document.querySelector('.lista-animali'));
-            root.render(<AnimalList />);
+        </script>
+        <script type="text/babel">
+            const {createRoot} = ReactDOM;
+            const listaAnimaliContainer = document.querySelector('.lista-animali')
+            const root = createRoot(listaAnimaliContainer)
+            root.render(<ListaAnimali />)
+
         </script>
     </head>
     <body>
