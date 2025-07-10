@@ -14,27 +14,70 @@
             
             const { useState } = React;
 
+            function Modal({
+                title, 
+                content, 
+                show = false, 
+                onClose = () => {},
+                onConfirm = () => {}
+            }){
+                return show && ReactDOM.createPortal(
+                    <div className="modal-container">
+                        <div className="modal">
+                            <h2>{title}</h2>
+                            <p>{content}</p>
+                            <div>
+
+                                <button onClick={onClose}>Annulla</button>
+                                <button onClick={onConfirm}>Conferma</button>
+
+                            </div>
+                        </div>
+                    </div>,
+                    document.body
+                )
+            }
+
             const ListaAnimali = () =>{
                 const animalsChoices = ["Cane", "Gatto", "Pappagallo", "Cavallo", "Panda"];
+
                 const [animals, setAnimals] = useState([])
 
+                const [show, setShow] = useState(false)
+                const [animalName, setAnimalName] = useState('')
+
+
                 const addAnimal = () => {
-                    const randomIndex = Math.floor(Math.random() * animalsChoices.length);
-                    const randomAnimal = animalsChoices[randomIndex]
-                    setAnimals(curr => [...curr, randomAnimal])
+                    if(!animalName) return;
+                    setAnimals(curr => [...curr, animalName])
+                    setAnimalName('')
+                    setShow(false)
                 }
 
-                return(
+                return (
                     <>
-                    <button onclick={addAnimal}>Aggiungi Animale Casuale</button>
-                    <details>
-                    <summary> Animali </summary>
-                    <ul>
-                        {animals.map((a, i) => (
-                            <li key={i}>{a}</li>
-                        ))}
-                    </ul>
-                    </details>
+                        <button onClick={() => setShow(true)}>Aggiungi Animale Casuale</button>
+                        <details>
+                            <summary> Animali </summary>
+                            <ul>
+                                {animals.map((a, i) => (
+                                    <li key={i}>{a}</li>
+                                ))}
+                            </ul>
+                        </details>
+                        <Modal
+                            show={show}
+                            onClose={() => setShow(false)}
+                            onConfirm={addAnimal}
+                            title='Aggiungi animale'
+                            content={
+                                <input
+                                    type="text"
+                                    value={animalName}
+                                    onChange={e => setAnimalName(e.target.value)}
+                                />
+                            }
+                        />
                     </>
                 )
             }
@@ -65,26 +108,7 @@
 </html>
 
 <!-- 
-Milestone 1: Inserire un Componente React
-Monta un componente React all’interno dell’elemento con classe .lista-animali.
 
-Il componente deve includere:
-Un elemento <details> con titolo "Animali", che contiene:
-Una lista <ul> statica che viene creata a partire da un array di stringhe (animals) dove ciascuna stringa rappresenta il nome di un animale.
 
-Obiettivo: Mostrare la struttura base della lista di animali con un <details> che può essere espanso o contratto.
-
--->
-<!--
-
-📌 Milestone 2: Aggiungere Animali Casuali
-Trasforma l’array animals usando useState (l’array è inizialmente vuoto).
-Aggiungi un bottone "Aggiungi Animale" sopra il <details>.
-Cliccando il bottone, un animale casuale viene aggiunto alla lista.
-Usa un array predefinito per scegliere casualmente:
-const animalsChoices = ["Cane", "Gatto", "Pappagallo", "Cavallo", "Panda"];
-L’animale selezionato deve essere aggiunto all’interno della lista <ul> come <li>.
-
-Obiettivo: L’utente può vedere gli animali aggiunti dinamicamente nella lista.
 
 -->
